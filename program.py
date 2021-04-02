@@ -1,6 +1,6 @@
 """Project
    @authors Christopher Haen cmh6674@rit.edu 
-      Steven Guan sxg8944@rit.edu
+            Steven Guan sxg8944@rit.edu
 """
 import matplotlib
 import pandas
