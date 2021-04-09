@@ -168,6 +168,48 @@ def add_accident_types(dataframe:pd.DataFrame):
   dataframe.index = range(len(dataframe))
   return dataframe
 
+def add_accident_types_loop(dataframe:pd.DataFrame):
+  dataframe['ACCIDENT_TYPE'] = ""
+
+  dataframe = get_car_accient_type_loop(dataframe)
+  dataframe = remove_none_accident_type(dataframe)
+  dataframe = dataframe.drop(columns=global_vars.drop_cols)
+  dataframe.index = range(len(dataframe))
+
+  return dataframe
+
+
+def get_car_accient_type_loop(dataframe:pd.DataFrame):
+  num_of_rows = len(dataframe)
+
+  for i in range(num_of_rows):
+    row = dataframe.iloc[i]
+    accident_type = "none"
+    ppl_killed_injured =  row['NUMBER OF PEDESTRIANS INJURED'] + row['NUMBER OF PEDESTRIANS KILLED'] +\
+                        row['NUMBER OF CYCLIST INJURED'] + row['NUMBER OF CYCLIST KILLED'] +\
+                        row['NUMBER OF MOTORIST INJURED'] + row['NUMBER OF MOTORIST KILLED']
+
+    vehicle_2_str = row['VEHICLE TYPE CODE 2']
+
+    if ppl_killed_injured > 0:
+      return_val = "car-pedestrian"
+    elif ppl_killed_injured <= 0:
+
+      if pd.notna(vehicle_2_str):
+        max_similarity, max_str = get_matched(vehicle_2_str.lower(), global_vars.pedestrian_vehicles)
+
+        if max_similarity >= 0.75:
+          accident_type = "car-pedestrian"
+        else:
+          accident_type = "car-only"
+    
+    dataframe.at[i, 'ACCIDENT_TYPE'] = accident_type
+    print("result = " + str(accident_type))
+  
+  return dataframe
+
+
+
 def remove_none_accident_type(dataframe: pd.DataFrame):
   print("Removing accident type with none values ...")
   num_of_rows = len(dataframe)
@@ -176,6 +218,7 @@ def remove_none_accident_type(dataframe: pd.DataFrame):
     val = dataframe.loc[i, 'ACCIDENT_TYPE']
     if val == "none":
       dataframe.drop(index=i, inplace=True)
+      print("Removed index = ", i)
 
   return dataframe
 

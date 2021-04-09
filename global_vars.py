@@ -1,10 +1,12 @@
 
 
 file_path ="Motor_Vehicle_Collisions_-_Crashes.csv"
-output_file_path = "data/Motor_Vehicle_Collisions_-_Crashes_month_8.csv"
+output_file_path = "data/Motor_Vehicle_Collisions_-_Crashes_month_10.csv"
+# file_path = "data/small_data.csv"
+# output_file_path = "data/small_data_cleaned.csv"
 
 max_year = 2020
-month = 8
+month = 10
 
 useful_cols = ['CRASH DATE', 'CRASH TIME', 'BOROUGH', 'LATITUDE', 'LONGITUDE',
                'NUMBER OF PERSONS INJURED', 'NUMBER OF PERSONS KILLED', 'NUMBER OF PEDESTRIANS INJURED',
