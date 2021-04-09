@@ -1,3 +1,6 @@
+"""
+@author Austin Cepalia acc5989@rit.edu 
+"""
 import numpy as np
 import editdistance 
 
