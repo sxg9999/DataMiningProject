@@ -21,13 +21,16 @@ def accident_type_vs_time(data: DataFrame, t1 = pandas.Timestamp.min, t2 = panda
 
   print(percents)
 
-  plt.bar(unique_types, percents)
-  plt.xlabel('Accident Type')
-  plt.ylabel('Percent of Occurrences')
+  #plt.bar(unique_types, percents)
+  plt.pie(percents, labels=unique_types, shadow=True, autopct='%1.1f%%')
+  #plt.xlabel('Accident Type')
+  #plt.ylabel('Percent of Occurrences')
   plt.title('Accidents by Type: ' + t1_str + ' - ' + t2_str)
   plt.show()
 
 
-data = pandas.read_csv('data/cleaned_data_month_8.csv')
+file = 'DataMiningProject\data\Crash Data\Motor_Vehicle_Collisions_-_Crashes_combined.csv'
+# file = 'DataMiningProject\data\cleaned_data_month_8.csv'
+data = pandas.read_csv(file)
 accident_type_vs_time(data, pandas.Timestamp.min, pandas.Timestamp(2020, 1, 1))
 accident_type_vs_time(data, pandas.Timestamp(2020, 1, 1), pandas.Timestamp(2021, 1, 1))
