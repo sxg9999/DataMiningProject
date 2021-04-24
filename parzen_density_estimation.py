@@ -10,6 +10,7 @@ import seaborn
 from sklearn.neighbors import KernelDensity
 from pandas.core.frame import DataFrame
 from scipy.stats import gaussian_kde
+from matplotlib.pyplot import imread
 
 ###################
 # KDE ZIP VS TIME #
@@ -79,9 +80,31 @@ def heatmap(data: DataFrame, t1 = pandas.Timestamp.min, t2 = pandas.Timestamp.no
 
 
 file = 'DataMiningProject\data\Crash Data\Motor_Vehicle_Collisions_-_Crashes_combined.csv'
-# file = 'DataMiningProject\data\cleaned_data_month_8.csv'
-# file = 'DataMiningProject\data\month_8_short_TEST_ONLY.csv'
+file = 'DataMiningProject\data\cleaned_data_month_8.csv'
+#file = 'DataMiningProject\data\month_8_short_TEST_ONLY.csv'
 data = pandas.read_csv(file)
 
-heatmap(data, pandas.Timestamp.min, pandas.Timestamp(2020, 1, 1))
+#heatmap(data, pandas.Timestamp.min, pandas.Timestamp(2020, 1, 1))
 #heatmap(data, pandas.Timestamp(2020, 1, 1), pandas.Timestamp(2021, 1, 1))
+
+
+def open_streets(data: DataFrame, t1 = pandas.Timestamp.min, t2 = pandas.Timestamp.now()):
+  data = heatmap_clean(data, t1, t2)
+  data = data[data['ACCIDENT_TYPE'] == 'car-pedestrian']
+  ax1 = seaborn.kdeplot(
+    data=data, x="LONGITUDE", y="LATITUDE", hue="BOROUGH", alpha=0.6
+  )
+
+  ax2 = seaborn.scatterplot(data=data, x='LONGITUDE', y='LATITUDE', s=4, alpha=0.5)
+
+  t1_str = str(t1.year) + '/' + str(t1.month) + '/' + str(t1.day)
+  t2_str = str(t2.year) + '/' + str(t2.month) + '/' + str(t2.day)
+  plt.title('Accidents by Type: ' + t1_str + ' - ' + t2_str)
+  
+  img = imread('DataMiningProject\\data\\Charts\\new-york-city-maps.jpg')
+  ax1.imshow(img, zorder=-1, extent=[-74.25, -73.7, 40.48, 40.92])
+
+  plt.show()
+
+
+# open_streets(data, pandas.Timestamp(2020, 1, 1), pandas.Timestamp(2021, 1, 1))
