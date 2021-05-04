@@ -1,6 +1,7 @@
 """Visualization Methods
    @author Christopher Haen cmh6674@rit.edu 
 """
+import numpy as np
 import pandas
 import matplotlib.pyplot as plt
 from datetime import datetime, time
@@ -29,8 +30,39 @@ def accident_type_vs_time(data: DataFrame, t1 = pandas.Timestamp.min, t2 = panda
   plt.show()
 
 
-file = 'DataMiningProject\data\Crash Data\Motor_Vehicle_Collisions_-_Crashes_combined.csv'
+def vehicle_types(data: DataFrame,):
+  unique_types = data['VEHICLE TYPE CODE 1'].unique()
+  vehicle_type_series = data['VEHICLE TYPE CODE 1']
+
+  types = []
+  percents = []
+
+  other = 0
+  for vehicle_type in unique_types:
+    percent = len(vehicle_type_series[vehicle_type_series == vehicle_type]) / len(vehicle_type_series) * 100
+    if percent < 0.75:
+      other += percent
+    else:
+      types.append(vehicle_type)
+      percents.append(len(vehicle_type_series[vehicle_type_series == vehicle_type]) / len(vehicle_type_series) * 100)
+
+  types.append('Other')
+  percents.append(other)
+
+  combined = zip(percents, types)
+  combined = sorted(combined, key = lambda x: x[0])
+  combined = list(zip(*combined))
+
+  plt.pie(combined[0], labels=combined[1], shadow=True, autopct='%1.1f%%')
+  plt.title('Car Types in Accidents - Less than .75% is grouped in Other')
+  plt.show()
+
+
+
+#file = 'DataMiningProject\data\Crash Data\Motor_Vehicle_Collisions_-_Crashes_combined.csv'
+file = 'DataMiningProject\data\Motor_Vehicle_Collisions_-_Crashes.csv'
 # file = 'DataMiningProject\data\cleaned_data_month_8.csv'
 data = pandas.read_csv(file)
-accident_type_vs_time(data, pandas.Timestamp.min, pandas.Timestamp(2020, 1, 1))
-accident_type_vs_time(data, pandas.Timestamp(2020, 1, 1), pandas.Timestamp(2021, 1, 1))
+#accident_type_vs_time(data, pandas.Timestamp.min, pandas.Timestamp(2020, 1, 1))
+#accident_type_vs_time(data, pandas.Timestamp(2020, 1, 1), pandas.Timestamp(2021, 1, 1))
+vehicle_types(data)
