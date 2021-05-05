@@ -1,10 +1,21 @@
+#
+# Accident by month visuals
+# 
+# Warning: this takes a minute or two to run
+#
+# @author: Steven Guan
+#
+
+
 import math
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 from datetime import datetime
 
-file_path = "data/Motor_Vehicle_Collisions_-_Crashes_combined.csv"
+
+
+file_path = "Motor_Vehicle_Collisions_-_Crashes_combined.csv"
 
 total_accident_before_2020 = {
     1:0,
